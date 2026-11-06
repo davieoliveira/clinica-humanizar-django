@@ -3,12 +3,10 @@ import bcrypt
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods
-from .decorators import tipo_requerido
-from django.contrib.auth import logout
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 
-from .models import Usuario
+from .decorators import login_requerido, tipo_requerido
+from .models import Usuario, Consulta
 
 def home(request):
     return render(request, 'home.html')
@@ -89,14 +87,6 @@ def redirecionar_dashboard(request):
     return redirect("login")
 
 
-def logout_view(request):
-
-    request.session.flush()
-
-    messages.success(request, "Você saiu do sistema.")
-
-    return redirect("login")
-
 @tipo_requerido("paciente")
 def home_paciente(request):
     return render(request, "paciente/home.html")
@@ -111,14 +101,28 @@ def home_medico(request):
 def home_recepcionista(request):
     return render(request, "recepcionista/home.html")
 
-
 @tipo_requerido("administrador")
 def home_administrador(request):
     return render(request, "administrador/home.html")
 
+# Tabela com consultas dos recepcionistas.
+@login_requerido
+@tipo_requerido("recepcionista")
+def listar_consultas(request):
+
+    consultas = Consulta.objects.select_related(
+        "id_medico",
+        "id_paciente"
+    ).order_by("-data_consulta", "-horario_consulta")
+
+    return render(
+        request,
+        "recepcionista/agenda.html",
+        {"consultas": consultas}
+    )
+    
 @require_POST
 def logout_view(request):
-    logout(request)
     request.session.flush()
 
     messages.success(request, "Você saiu do sistema.")
