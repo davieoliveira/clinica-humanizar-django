@@ -7,5 +7,9 @@
 <body>
     <h1>Bem-vindo ao painel do paciente!</h1>
     <p>Autenticação funcionando!</p>
+    <form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Sair</button>
+</form>
 </body>
 </html>

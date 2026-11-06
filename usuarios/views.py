@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from .decorators import tipo_requerido
+from django.contrib.auth import logout
+from django.views.decorators.http import require_POST
 
 from .models import Usuario
 
@@ -95,8 +97,6 @@ def logout_view(request):
 
     return redirect("login")
 
-
-
 @tipo_requerido("paciente")
 def home_paciente(request):
     return render(request, "paciente/home.html")
@@ -115,3 +115,12 @@ def home_recepcionista(request):
 @tipo_requerido("administrador")
 def home_administrador(request):
     return render(request, "administrador/home.html")
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    request.session.flush()
+
+    messages.success(request, "Você saiu do sistema.")
+
+    return redirect("login")
