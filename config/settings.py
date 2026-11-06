@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     'usuarios', # Para adicionar o app de usuários que criei.
 ]
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware', # Permite manter o usuário conectado.
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', # Protege os formulários contra ataques CSRF.
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware', # Permite exibir mensagens como login inválido e logout realizado.
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -84,7 +84,7 @@ DATABASES = {
 
         'OPTIONS': {
             'charset': 'utf8mb4',
-             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", # ativando o Strict Mode para evitar erros não tratados. (pesquisar)
+             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'", # ativando o Strict Mode para evitar erros não tratados (ajuda a entender os erros do mariadb).
         },
     }
 }

@@ -1,0 +1,52 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Login | Clínica Humanizar
+{% endblock %}
+
+{% block content %}
+
+<section class="form-card">
+
+    <span class="eyebrow">Bem-vindo de volta</span>
+
+    <h1>Entrar na sua conta</h1>
+
+    <p class="muted">
+        Informe seu e-mail e sua senha para continuar.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <label for="email">E-mail</label>
+
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="seuemail@exemplo.com"
+            required
+        >
+
+        <label for="senha">Senha</label>
+
+        <input
+            type="password"
+            id="senha"
+            name="senha"
+            placeholder="Sua senha"
+            required
+        >
+
+        <button class="button full" type="submit">
+            Entrar
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}

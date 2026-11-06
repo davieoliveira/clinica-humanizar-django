@@ -1,6 +1,6 @@
 from django.db import models
 
-
+# Models gerados a partir do inspectdb, que leu o banco de dados da configuração e trouxe essas classes baseada nas tabelas.
 class Especialidade(models.Model):
     id_especialidade = models.AutoField(primary_key=True)
     nome_especialidade = models.CharField(max_length=100)
@@ -76,3 +76,16 @@ class Consulta(models.Model):
 
     def __str__(self):
         return f'Consulta {self.id_consulta}'
+
+
+    def senha_valida(senha_armazenada, senha_digitada):
+        if not senha_armazenada:
+            return False
+
+        if senha_armazenada.startswith(("$2a$", "$2b$", "$2y$")):
+            return bcrypt.checkpw(
+                senha_digitada.encode("utf-8"),
+                senha_armazenada.encode("utf-8")
+            )
+
+        return check_password(senha_digitada, senha_armazenada)
