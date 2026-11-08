@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1> Consultas do Médico</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Paciente</th>
+            <th>Data</th>
+            <th>Horário</th>
+            <th>Detalhes</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for consulta in consultas %}
+        <tr>
+            <td>
+                {{ consulta.id_paciente.nome_usuario }}
+            </td>
+
+            <td>
+                {{ consulta.data_consulta|date:"d/m/Y" }}
+            </td>
+
+            <td>
+                {{ consulta.horario_consulta|time:"H:i" }}
+            </td>
+
+            <td>
+                {{ consulta.detalhes_consulta|default:"-" }}
+            </td>
+
+            <td>
+                {{ consulta.status_consulta|default:"-" }}
+            </td>
+        </tr>
+
+        {% empty %}
+        <tr>
+            <td colspan="7">
+                Nenhuma consulta cadastrada.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -120,6 +120,42 @@ def listar_consultas(request):
         "recepcionista/agenda.html",
         {"consultas": consultas}
     )
+
+# Tabela com as consultas do paciente logado.
+@login_requerido
+@tipo_requerido("paciente")
+def listar_consultas_paciente(request):
+
+    consultas = Consulta.objects.select_related(
+        "id_medico",
+        "id_paciente"
+    ).filter(
+        id_paciente_id=request.session["usuario_id"]
+    ).order_by("-data_consulta", "-horario_consulta")
+
+    return render(
+        request,
+        "paciente/consultas.html",
+        {"consultas": consultas}
+    )
+
+# Tabela com as consultas do medicco logado.
+@login_requerido
+@tipo_requerido("medico")
+def listar_consultas_medico(request):
+
+    consultas = Consulta.objects.select_related(
+        "id_medico",
+        "id_paciente"
+    ).filter(
+        id_medico_id=request.session["usuario_id"]
+    ).order_by("-data_consulta", "-horario_consulta")
+
+    return render(
+        request,
+        "medico/consultas.html",
+        {"consultas": consultas}
+    )
     
 @require_POST
 def logout_view(request):

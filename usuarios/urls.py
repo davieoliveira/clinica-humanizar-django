@@ -11,8 +11,11 @@ urlpatterns = [
 
     # Páginas por tipo de usuário
     path("paciente/", views.home_paciente, name="home_paciente"),
+    path("paciente/consultas", views.listar_consultas_paciente, name="listar_consultas_paciente"),
     
     path("medico/", views.home_medico, name="home_medico"),
+    path("medico/consultas/", views.listar_consultas_medico, name="listar_consultas_medico"),
+
 
     path("recepcionista/", views.home_recepcionista, name="home_recepcionista"),
     path("recepcionista/consultas/", views.listar_consultas, name="listar_consultas"),

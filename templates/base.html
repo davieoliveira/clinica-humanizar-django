@@ -44,12 +44,24 @@
                                 Início
                             </a>
                         </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'listar_consultas_paciente' %}">
+                                Minhas Consultas
+                            </a>
+                        </li>
+
 
                     {% elif request.session.usuario_tipo == "medico" %}
 
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'home_medico' %}">
                                 Início
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'listar_consultas_medico' %}">
+                                Minhas Consultas
                             </a>
                         </li>
 
