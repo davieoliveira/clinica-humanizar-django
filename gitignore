@@ -1,0 +1,52 @@
+# Ambientes virtuais
+venv/
+.venv/
+env/
+ENV/
+
+# Python: cache e arquivos compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+
+# Variáveis de ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Testes, cobertura e ferramentas
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.mypy_cache/
+.dmypy.json
+.pyre/
+.ruff_cache/
+
+# IDEs e editores (remova estas regras se quiser compartilhar configurações)
+.idea/
+.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos temporários e backups
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
