@@ -5,6 +5,19 @@
     <title>Painel do Paciente</title>
 </head>
 <body>
+    {% extends "base.html" %}
+
+    {% block title %}
+    Painel da Recepcionista | Clínica Humanizar
+    {% endblock %}
+
+    {% block content %}
+
+    <h1>Bem-vinda ao painel da Recepcionista!</h1>
+
+    <p>Autenticação funcionando!</p>
+
+    {% endblock %}
     <h1>Bem-vindo ao painel de Recepcionista!</h1>
     <p>Autenticação funcionando!</p>
     <form method="POST" action="{% url 'logout' %}">
