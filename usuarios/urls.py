@@ -3,7 +3,12 @@ from . import views
 
 urlpatterns = [
     # Acesso público
-    path('login/', views.login_view, name='login_view'),
+    path('login/', views.login_view, name='login'),
+    path('cadastro/', views.cadastro_view, name='cadastro'),
+    path('painel/', views.redirecionar_dashboard, name='redirecionar_dashboard'),
+    path('logout/', views.logout_view, name='logout'),
+
+
 
     # Pacientes
     path('paciente/', views.home_paciente, name='home_paciente'),

@@ -3,6 +3,10 @@
 from .auth import (
     home_publica,
     login_view,
+    logout_view,
+    senha_valida,
+    redirecionar_dashboard,
+    cadastro_view,
 )
 
 from .paciente import (
