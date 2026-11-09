@@ -2,10 +2,11 @@ import bcrypt
 
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods, require_POST
 
 from .decorators import login_requerido, tipo_requerido
+from .forms import ConsultaForm
 from .models import Usuario, Consulta
 
 def home(request):
@@ -139,7 +140,7 @@ def listar_consultas_paciente(request):
         {"consultas": consultas}
     )
 
-# Tabela com as consultas do medicco logado.
+# Tabela com as consultas do médico logado.
 @login_requerido
 @tipo_requerido("medico")
 def listar_consultas_medico(request):
@@ -156,7 +157,7 @@ def listar_consultas_medico(request):
         "medico/consultas.html",
         {"consultas": consultas}
     )
-    
+
 @require_POST
 def logout_view(request):
     request.session.flush()
@@ -164,3 +165,38 @@ def logout_view(request):
     messages.success(request, "Você saiu do sistema.")
 
     return redirect("login")
+
+# Recepcionista edita uma consulta existente.
+@tipo_requerido("recepcionista")
+@require_http_methods(["GET", "POST"])
+def editar_consulta(request, id_consulta):
+
+    consulta = get_object_or_404(Consulta, pk=id_consulta)
+
+    if request.method == "POST":
+        form = ConsultaForm(request.POST, instance=consulta)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Consulta atualizada com sucesso.")
+            return redirect("listar_consultas")
+    else:
+        form = ConsultaForm(instance=consulta)
+
+    return render(
+        request,
+        "recepcionista/editar_consulta.html",
+        {"form": form, "consulta": consulta},
+    )
+
+
+# Recepcionista exclui uma consulta (somente via POST).
+@tipo_requerido("recepcionista")
+@require_POST
+def excluir_consulta(request, id_consulta):
+
+    consulta = get_object_or_404(Consulta, pk=id_consulta)
+    consulta.delete()
+
+    messages.success(request, "Consulta excluída com sucesso.")
+    return redirect("listar_consultas")

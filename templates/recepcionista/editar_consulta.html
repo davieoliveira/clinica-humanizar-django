@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Consulta | Clínica Humanizar{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="max-width: 640px;">
+
+    <h1 class="h3 mb-4">Editar consulta #{{ consulta.id_consulta }}</h1>
+
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        {% for campo in form %}
+            <div class="mb-3">
+                <label for="{{ campo.id_for_label }}" class="form-label">{{ campo.label }}</label>
+                {{ campo }}
+                {% for erro in campo.errors %}
+                    <div class="text-danger small">{{ erro }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Salvar alterações</button>
+        <a href="{% url 'listar_consultas' %}" class="btn btn-outline-secondary">Cancelar</a>
+    </form>
+
+</div>
+{% endblock %}

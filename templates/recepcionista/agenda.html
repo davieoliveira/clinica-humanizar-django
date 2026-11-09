@@ -1,11 +1,11 @@
-
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container mt-4">
 
 <h1>Consultas da Clínica</h1>
 
-<table class="table">
+<table class="table align-middle">
     <thead>
         <tr>
             <th>ID</th>
@@ -15,6 +15,7 @@
             <th>Horário</th>
             <th>Detalhes</th>
             <th>Status</th>
+            <th>Ações</th>
         </tr>
     </thead>
 
@@ -22,40 +23,59 @@
         {% for consulta in consultas %}
         <tr>
             <td>{{ consulta.id_consulta }}</td>
+            <td>{{ consulta.id_paciente.nome_usuario }}</td>
+            <td>{{ consulta.id_medico.nome_usuario }}</td>
+            <td>{{ consulta.data_consulta|date:"d/m/Y" }}</td>
+            <td>{{ consulta.horario_consulta|time:"H:i" }}</td>
+            <td>{{ consulta.detalhes_consulta|default:"-" }}</td>
+            <td>{{ consulta.status_consulta|default:"-" }}</td>
 
-            <td>
-                {{ consulta.id_paciente.nome_usuario }}
-            </td>
+            <td class="text-nowrap">
+                <a href="{% url 'editar_consulta' consulta.id_consulta %}"
+                   class="btn btn-sm btn-outline-primary">Editar</a>
 
-            <td>
-                {{ consulta.id_medico.nome_usuario }}
-            </td>
+                <button type="button" class="btn btn-sm btn-outline-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalExcluir{{ consulta.id_consulta }}">
+                    Excluir
+                </button>
 
-            <td>
-                {{ consulta.data_consulta|date:"d/m/Y" }}
-            </td>
-
-            <td>
-                {{ consulta.horario_consulta|time:"H:i" }}
-            </td>
-
-            <td>
-                {{ consulta.detalhes_consulta|default:"-" }}
-            </td>
-
-            <td>
-                {{ consulta.status_consulta|default:"-" }}
+                <!-- Modal de confirmação -->
+                <div class="modal fade" id="modalExcluir{{ consulta.id_consulta }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Excluir consulta</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                Tem certeza que deseja excluir a consulta de
+                                <strong>{{ consulta.id_paciente.nome_usuario }}</strong>
+                                com <strong>{{ consulta.id_medico.nome_usuario }}</strong>
+                                em {{ consulta.data_consulta|date:"d/m/Y" }} às
+                                {{ consulta.horario_consulta|time:"H:i" }}?
+                                Essa ação não pode ser desfeita.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <form method="POST" action="{% url 'excluir_consulta' consulta.id_consulta %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Sim, excluir</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
 
         {% empty %}
         <tr>
-            <td colspan="7">
-                Nenhuma consulta cadastrada.
-            </td>
+            <td colspan="8">Nenhuma consulta cadastrada.</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
+</div>
 {% endblock %}
