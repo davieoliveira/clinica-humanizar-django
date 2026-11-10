@@ -1,81 +1,294 @@
+
 {% extends "base.html" %}
 
+{% block title %}Agenda de Consultas | Clínica Humanizar{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
 
-<h1>Consultas da Clínica</h1>
+<div class="container py-4">
 
-<table class="table align-middle">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Paciente</th>
-            <th>Médico</th>
-            <th>Data</th>
-            <th>Horário</th>
-            <th>Detalhes</th>
-            <th>Status</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
+    <!-- CABEÇALHO -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 
-    <tbody>
-        {% for consulta in consultas %}
-        <tr>
-            <td>{{ consulta.id_consulta }}</td>
-            <td>{{ consulta.id_paciente.nome_usuario }}</td>
-            <td>{{ consulta.id_medico.nome_usuario }}</td>
-            <td>{{ consulta.data_consulta|date:"d/m/Y" }}</td>
-            <td>{{ consulta.horario_consulta|time:"H:i" }}</td>
-            <td>{{ consulta.detalhes_consulta|default:"-" }}</td>
-            <td>{{ consulta.status_consulta|default:"-" }}</td>
+        <div>
+            <h1 class="h4 fw-semibold mb-1">Agenda de consultas</h1>
+            <p class="text-secondary small mb-0">
+                Acompanhe e gerencie as consultas da clínica.
+            </p>
+        </div>
 
-            <td class="text-nowrap">
-                <a href="{% url 'editar_consulta' consulta.id_consulta %}"
-                   class="btn btn-sm btn-outline-primary">Editar</a>
+        <div class="d-flex gap-2">
+            <span class="badge bg-primary-subtle text-primary align-self-center px-3 py-2">
+                {{ consultas|length }} consultas
+            </span>
+        </div>
 
-                <button type="button" class="btn btn-sm btn-outline-danger"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalExcluir{{ consulta.id_consulta }}">
-                    Excluir
-                </button>
+    </div>
 
-                <!-- Modal de confirmação -->
-                <div class="modal fade" id="modalExcluir{{ consulta.id_consulta }}" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Excluir consulta</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+
+    <!-- LISTAGEM -->
+    <div class="row g-4">
+
+        <!-- AGENDA -->
+        <div class="col-12">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <h2 class="h6 fw-semibold mb-0">
+                    <i class="bi bi-calendar3 me-2 text-primary"></i>
+                    Consultas cadastradas
+                </h2>
+
+                <span class="text-secondary small">
+                    Horários de Brasília
+                </span>
+
+            </div>
+
+
+            {% for consulta in consultas %}
+
+                <!-- card da consulta -->
+                <div class="card border shadow-sm mb-3">
+
+                    <div class="card-body p-3">
+
+                        <div class="row align-items-center g-3">
+
+                            <!-- data/horario -->
+                            <div class="col-auto">
+
+                                <div class="bg-primary-subtle text-primary rounded-2 p-2 text-center"
+                                     style="min-width: 78px;">
+
+                                    <div class="fs-5 fw-semibold">
+                                        {{ consulta.horario_consulta|time:"H:i" }}
+                                    </div>
+
+                                    <div class="small">
+                                        {{ consulta.data_consulta|date:"d/m/Y" }}
+                                    </div>
+
+                                </div>
+
                             </div>
-                            <div class="modal-body">
-                                Tem certeza que deseja excluir a consulta de
-                                <strong>{{ consulta.id_paciente.nome_usuario }}</strong>
-                                com <strong>{{ consulta.id_medico.nome_usuario }}</strong>
-                                em {{ consulta.data_consulta|date:"d/m/Y" }} às
-                                {{ consulta.horario_consulta|time:"H:i" }}?
-                                Essa ação não pode ser desfeita.
+
+
+                            <!-- dados -->
+                            <div class="col">
+
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+
+                                    <h3 class="h6 fw-semibold mb-0">
+                                        {{ consulta.id_paciente.nome_usuario }}
+                                    </h3>
+
+                                    {% if consulta.status_consulta == "confirmada" %}
+
+                                        <span class="badge bg-success-subtle text-success">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Confirmada
+                                        </span>
+
+                                    {% elif consulta.status_consulta == "pendente" %}
+
+                                        <span class="badge bg-warning-subtle text-warning-emphasis">
+                                            <i class="bi bi-clock me-1"></i>
+                                            Pendente
+                                        </span>
+
+                                    {% elif consulta.status_consulta == "cancelada" %}
+
+                                        <span class="badge bg-danger-subtle text-danger">
+                                            <i class="bi bi-x-circle me-1"></i>
+                                            Cancelada
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary-subtle text-secondary">
+                                            {{ consulta.status_consulta|default:"Sem status"|title }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <p class="text-secondary small mb-1">
+                                    <i class="bi bi-person-badge me-1"></i>
+                                    Dr(a). {{ consulta.id_medico.nome_usuario }}
+                                </p>
+
+                                <p class="text-secondary small mb-0">
+                                    <i class="bi bi-card-text me-1"></i>
+                                    {{ consulta.detalhes_consulta|default:"Nenhum detalhe informado" }}
+                                </p>
+
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <form method="POST" action="{% url 'excluir_consulta' consulta.id_consulta %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">Sim, excluir</button>
-                                </form>
+
+
+                            <!-- ações -->
+                            <div class="col-12 col-md-auto">
+
+                                <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+
+                                    <a href="{% url 'editar_consulta' consulta.id_consulta %}"
+                                       class="btn btn-sm btn-outline-primary">
+
+                                        <i class="bi bi-pencil me-1"></i>
+                                        Editar
+
+                                    </a>
+
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalExcluir{{ consulta.id_consulta }}">
+
+                                        <i class="bi bi-trash me-1"></i>
+                                        Excluir
+
+                                    </button>
+
+                                </div>
+
                             </div>
+
                         </div>
-                    </div>
-                </div>
-            </td>
-        </tr>
 
-        {% empty %}
-        <tr>
-            <td colspan="8">Nenhuma consulta cadastrada.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                    </div>
+
+                    <!-- footer caartão -->
+                    <div class="card-footer bg-white py-2">
+
+                        <span class="text-secondary small">
+                            <i class="bi bi-hash me-1"></i>
+                            Consulta nº {{ consulta.id_consulta }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- moral exclusao -->
+                <div class="modal fade"
+                     id="modalExcluir{{ consulta.id_consulta }}"
+                     tabindex="-1"
+                     aria-hidden="true">
+
+                    <div class="modal-dialog modal-dialog-centered">
+
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+
+                                <h5 class="modal-title">
+                                    Excluir consulta
+                                </h5>
+
+                                <button type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Fechar">
+                                </button>
+
+                            </div>
+
+
+                            <div class="modal-body">
+
+                                <p>
+                                    Tem certeza que deseja excluir esta consulta?
+                                </p>
+
+                                <div class="bg-light rounded p-3">
+
+                                    <p class="mb-1">
+                                        <strong>Paciente:</strong>
+                                        {{ consulta.id_paciente.nome_usuario }}
+                                    </p>
+
+                                    <p class="mb-1">
+                                        <strong>Médico:</strong>
+                                        {{ consulta.id_medico.nome_usuario }}
+                                    </p>
+
+                                    <p class="mb-0">
+                                        <strong>Data:</strong>
+                                        {{ consulta.data_consulta|date:"d/m/Y" }}
+                                        às
+                                        {{ consulta.horario_consulta|time:"H:i" }}
+                                    </p>
+
+                                </div>
+
+                                <p class="text-danger small mt-3 mb-0">
+                                    Esta ação não pode ser desfeita.
+                                </p>
+
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button type="button"
+                                        class="btn btn-light"
+                                        data-bs-dismiss="modal">
+
+                                    Cancelar
+
+                                </button>
+
+                                <form method="POST"
+                                      action="{% url 'excluir_consulta' consulta.id_consulta %}">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="btn btn-danger">
+
+                                        <i class="bi bi-trash me-1"></i>
+                                        Sim, excluir
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <!-- ESTADO VAZIO -->
+                <div class="card border shadow-sm">
+
+                    <div class="card-body text-center py-5">
+
+                        <i class="bi bi-calendar-x text-secondary display-4"></i>
+
+                        <h3 class="h5 mt-3">
+                            Nenhuma consulta cadastrada
+                        </h3>
+
+                        <p class="text-secondary small mb-0">
+                            Quando houver consultas cadastradas, elas aparecerão aqui.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
 
 </div>
+
 {% endblock %}

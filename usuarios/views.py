@@ -1,5 +1,7 @@
-import bcrypt
+from datetime import timezone
 
+import bcrypt
+from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect, get_object_or_404
@@ -122,6 +124,64 @@ def listar_consultas(request):
         {"consultas": consultas}
     )
 
+# Tabela com consultas do dia para os recepcionistas.
+@login_requerido
+@tipo_requerido("recepcionista")
+def home_recepcionista(request):
+
+    # Data atual considerando o fuso horário do Django
+    hoje = timezone.localdate()
+    
+    # Consultas do dia
+    consultas = Consulta.objects.filter(
+        data_consulta=hoje
+    ).select_related(
+        "id_paciente",
+        "id_medico"
+    ).order_by(
+        "horario_consulta"
+    )
+
+    # Lista de médicos para o filtro
+    medicos = Usuario.objects.filter(
+        tipo_usuario="medico"
+    ).order_by(
+        "nome_usuario"
+    )
+
+    # Filtro opcional por médico
+    medico_selecionado = request.GET.get("medico", "")
+
+    if medico_selecionado.isdigit():
+
+        medico_existe = medicos.filter(
+            id_usuario=int(medico_selecionado)
+        ).exists()
+
+        if medico_existe:
+            consultas = consultas.filter(
+                id_medico_id=int(medico_selecionado)
+            )
+        else:
+            medico_selecionado = ""
+
+    else:
+        medico_selecionado = ""
+
+    context = {
+        "consultas": consultas,
+        "medicos": medicos,
+        "medico_selecionado": medico_selecionado,
+        "hoje": hoje,
+    }
+
+    return render(
+        request,
+        "recepcionista/home.html",
+        context
+    )
+
+
 # Tabela com as consultas do paciente logado.
 @login_requerido
 @tipo_requerido("paciente")
@@ -137,6 +197,23 @@ def listar_consultas_paciente(request):
     return render(
         request,
         "paciente/consultas.html",
+        {"consultas": consultas}
+    )
+
+@login_requerido
+@tipo_requerido("recepcionista")
+def listas_consultas_pendentes(request):
+
+    consultas = Consulta.objects.select_related(
+        "id_medico",
+        "id_paciente"
+    ).filter(
+        status_consulta="pendente"
+    ).order_by("-data_consulta", "-horario_consulta")
+
+    return render(
+        request,
+        "recepcionista/consultas_pendentes.html",
         {"consultas": consultas}
     )
 
@@ -188,7 +265,6 @@ def editar_consulta(request, id_consulta):
         "recepcionista/editar_consulta.html",
         {"form": form, "consulta": consulta},
     )
-
 
 # Recepcionista exclui uma consulta (somente via POST).
 @tipo_requerido("recepcionista")
