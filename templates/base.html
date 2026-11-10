@@ -99,6 +99,15 @@
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link small {% if request.resolver_match.url_name == 'consultas_pendentes' %}active{% else %}text-secondary{% endif %}"
+                            href="{% url 'consultas_pendentes' %}">
+
+                                Solicitações
+
+                            </a>
+                         </li>
+
                     {% elif request.session.usuario_tipo == "administrador" %}
 
                         <li class="nav-item">
