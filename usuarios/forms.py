@@ -6,7 +6,7 @@ from .models import Consulta, Usuario
 class ConsultaForm(forms.ModelForm):
 
     STATUS_CHOICES = [
-        ("agendada", "Agendada"),
+        ("pendente", "Pendente"),
         ("confirmada", "Confirmada"),
         ("realizada", "Realizada"),
         ("cancelada", "Cancelada"),
