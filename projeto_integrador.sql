@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 10/11/2026 às 19:48
+-- Tempo de geração: 11/11/2026 às 21:17
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -246,10 +246,10 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('6zkn301hdmpaczz6r6lqdwwr618er8cy', 'e30:1xQVvJ:PD-rxwJsutbAxXekYjarRfcbArIM6S0mC1A-6fIJtNc', '2026-11-23 20:25:01.931248'),
 ('g6hdjlt8fcnkdyurc6c06ctzigyyiyck', '.eJyrViotLk0sysyPz0xRsjLSgXPz8nNTlayUHPMSFYJSk1MLkjPz8zKLSxKVEEpKMgvygUqKUKRrAcXIHdQ:1xQSKX:mpIa-KR9eB3wuheS9YBZ_TP7yf-LQVhpTf64D0St3kw', '2026-11-23 16:34:49.102198'),
 ('gzzx6ep512ekuspmqflj7tcyb47zu5sk', 'e30:1xQoYZ:DkLTEk_fFg242LPybfw5-6CTMRZe2HKeFY210CvYLnw', '2026-11-24 13:18:47.891132'),
+('iedhv4dfrmzq0a85ht1a6gl95ugq2cqg', '.eJyrViotLk0sysyPz0xRsjLUgXPz8nNTlayUnBOLcvKLFRxTcjPzMotLihJT8ouUEKpKMgvygaoSUaRrASyoHzc:1xREZf:WydoyKMOrRJxRihwPbdSXsPLp89AJl9jxdcPDKAqaKw', '2026-11-25 20:05:39.999265'),
 ('muibi0ilp69kzu80kw2pw3vki2bk029p', '.eJyrViotLk0sysyPz0xRsjI00oHz8_JzU5WslFwSyzIVXHMT80pTcxSc84tLEhX8czLLUjOLEpUQiksyC_KBigsSkzNT80pSlWoBZnsfTA:1xQp8y:eCwGWqEj4InpVgSzeEem7-cSXC-ZWp2XqyNK6UE8tsg', '2026-11-24 16:56:24.754718'),
 ('p0edkaxjsn4bldrfkde0so9ffm4b3i1v', 'e30:1xQVtP:RYHG3XGJjLa3poLiVPIuZLS92FI7d6Gjmxmgqo59jHU', '2026-11-23 20:23:03.914188'),
-('ppgoaq3fvqomu5cs25hggohe1fo0tlku', 'e30:1xQVmu:8DAQk3nmVHIxq71q35E6FjPumOzoVZJ19rlgC0iTXwo', '2026-11-23 20:16:20.858652'),
-('yvluke1i1rd0mxbak4kw1xk9ss9vmi8q', '.eJyrViotLk0sysyPz0xRsjLSgXPz8nNTlayUHPMSFYJSk1MLkjPz8zKLSxKVEEpKMgvygUqKUKRrAcXIHdQ:1xQqm0:w3GOucPLuvfPpsrvSLw9uFxENkg7GNWXMKPWl3jtSm0', '2026-11-24 18:40:48.216225');
+('ppgoaq3fvqomu5cs25hggohe1fo0tlku', 'e30:1xQVmu:8DAQk3nmVHIxq71q35E6FjPumOzoVZJ19rlgC0iTXwo', '2026-11-23 20:16:20.858652');
 
 -- --------------------------------------------------------
 
@@ -272,15 +272,17 @@ CREATE TABLE `tbconsulta` (
 --
 
 INSERT INTO `tbconsulta` (`id_consulta`, `id_medico`, `id_paciente`, `detalhes_consulta`, `horario_consulta`, `data_consulta`, `status_consulta`) VALUES
-(1, 3, 6, 'Paciente relata dores no peito ocasionais.', '08:00:00', '2026-11-05', 'confirmada'),
-(2, 4, 7, 'Avaliação dermatológica de rotina.', '09:30:00', '2026-11-05', ''),
-(3, 5, 8, 'Consulta pediátrica de acompanhamento.', '10:00:00', '2026-11-06', ''),
+(2, 4, 7, 'Avaliação dermatológica de rotina.', '09:30:00', '2026-11-05', 'pendente'),
+(3, 5, 8, 'Consulta pediátrica de acompanhamento.', '10:00:00', '2026-11-06', 'pendente'),
 (4, 3, 9, 'Retorno para avaliação cardiológica.', '14:00:00', '2026-11-06', 'realizada'),
 (5, 4, 10, 'Avaliação de irritação na pele.', '15:30:00', '2026-11-07', 'cancelada'),
-(8, 3, 9, '', '10:00:00', '2026-11-10', ''),
+(8, 3, 9, '', '10:00:00', '2026-11-10', 'pendente'),
 (9, 4, 10, 'Verificar meu cabelo', '10:00:00', '2027-01-20', 'confirmada'),
 (10, 4, 11, NULL, '10:00:00', '2026-11-11', 'pendente'),
-(11, 4, 12, NULL, '10:00:00', '2026-11-11', 'pendente');
+(11, 4, 12, NULL, '10:00:00', '2026-11-11', 'pendente'),
+(12, 4, 11, NULL, '17:00:00', '2026-11-11', 'confirmada'),
+(13, 13, 11, 'Checagem de desconforto nasal', '10:00:00', '2026-11-11', 'pendente'),
+(14, 13, 9, NULL, '10:00:00', '2026-11-11', 'pendente');
 
 -- --------------------------------------------------------
 
@@ -338,7 +340,8 @@ INSERT INTO `tbusuario` (`id_usuario`, `nome_usuario`, `email_usuario`, `senha_u
 (9, 'Juliana Souza', 'juliana.souza@gmail.com', '$2b$12$EoiyuYgCNjakBv75NGe6kujY0aOZoRT0QXfGs7EZaiUZMsB9BagAG', '00000000009', NULL, 'Feminino', NULL, 'paciente'),
 (10, 'Fernanda Lima', 'fernanda.lima@gmail.com', '$2b$12$EoiyuYgCNjakBv75NGe6kujY0aOZoRT0QXfGs7EZaiUZMsB9BagAG', '00000000010', NULL, 'Feminino', NULL, 'paciente'),
 (11, 'Davi Oliveira', 'davi@gmail.com', '$2y$10$HwTHejjIzZPfNWjansXZVOFmqXmJmUoTnLfcPLrgWIv/aaAC.tvGO', '01670820432', NULL, 'Masculino', NULL, 'paciente'),
-(12, 'Davi Emanuel Costa Oliveira', 'daviecostaoliveira@gmail.com', 'pbkdf2_sha256$720000$75RFKI1yeBYdYWhupyxBnB$hUIQgnSZdn3AQv5k/0S84GSq0zGgp6J8kJwFJ7czVQY=', '016.708.204-32', NULL, 'Masculino', NULL, 'paciente');
+(12, 'Davi Emanuel Costa Oliveira', 'daviecostaoliveira@gmail.com', 'pbkdf2_sha256$720000$75RFKI1yeBYdYWhupyxBnB$hUIQgnSZdn3AQv5k/0S84GSq0zGgp6J8kJwFJ7czVQY=', '016.708.204-32', NULL, 'Masculino', NULL, 'paciente'),
+(13, 'Samuel Marques', 'samuel.marques@gmail.com', '$2b$12$EoiyuYgCNjakBv75NGe6kujY0aOZoRT0QXfGs7EZaiUZMsB9BagAG', '01478954632', '211878451', 'Masculino', 2, 'medico');
 
 -- --------------------------------------------------------
 
@@ -531,7 +534,7 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT de tabela `tbconsulta`
 --
 ALTER TABLE `tbconsulta`
-  MODIFY `id_consulta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_consulta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de tabela `tbespecialidade`
@@ -543,7 +546,7 @@ ALTER TABLE `tbespecialidade`
 -- AUTO_INCREMENT de tabela `tbusuario`
 --
 ALTER TABLE `tbusuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restrições para tabelas despejadas
