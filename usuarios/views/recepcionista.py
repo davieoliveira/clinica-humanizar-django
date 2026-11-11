@@ -62,7 +62,7 @@ def home_recepcionista(request):
 
     return render(
         request,
-        "recepcionista/home.html",
+        "medico/home.html",
         context
     )
 

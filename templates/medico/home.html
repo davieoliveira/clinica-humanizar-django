@@ -1,28 +1,238 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Painel do Paciente</title>
-</head>
-<body>
-    {% extends "base.html" %}
+{% extends "base.html" %}
 
-    {% block title %}
-    Painel do Médico | Clínica Humanizar
-    {% endblock %}
+{% block title %}Painel do Médico | Clínica Humanizar{% endblock %}
 
-    {% block content %}
+{% block content %}
 
-    <h1>Bem-vindo ao painel do Médico!</h1>
+<div class="container py-4">
 
-    <p>Autenticação funcionando!</p>
+    <!-- Título -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 
-    {% endblock %}
-    <h1>Bem-vindo ao painel do medico!</h1>
-    <p>Autenticação funcionando!</p>
-    <form method="POST" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Sair</button>
-</form>
-</body>
-</html>
+        <div>
+            <h1 class="h4 fw-semibold mb-1">
+                Painel do Médico
+            </h1>
+
+            <p class="text-secondary small mb-0">
+                Olá, Dr(a). {{ request.session.usuario_nome }}.
+                Seja bem-vindo(a) à Clínica Humanizar.
+            </p>
+        </div>
+
+        <div>
+            <span class="badge bg-primary-subtle text-primary px-3 py-2">
+                <i class="bi bi-heart-pulse me-1"></i>
+                 Data: {{ hoje|date:"d/m/Y" }} | {{ consultas|length }} consulta(s)
+            </span>
+        </div>
+
+    </div>
+
+
+    <!-- banner de boas vindas -->
+    <div class="card border shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="row align-items-center g-3">
+
+                <div class="col-auto">
+                    <div class="rounded-3 bg-primary-subtle text-primary p-3 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-clipboard2-pulse fs-3"></i>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <h2 class="h5 fw-semibold mb-1">
+                        Bem-vindo(a) ao seu espaço profissional!
+                    </h2>
+
+                    <p class="text-secondary small mb-0">
+                        Aqui você acompanha sua agenda de atendimentos, consulta os horários
+                        agendados e verifica as informações e o status de cada consulta.
+                    </p>
+                </div>
+
+                <div class="col-12 col-md-auto">
+                    <a href="{% url 'listar_consultas_medico' %}"
+                       class="btn btn-primary btn-sm px-3">
+                        <i class="bi bi-calendar2-check me-1"></i>
+                        Minha agenda
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<!-- listagem de consultas -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+        <div>
+            <h1 class="h4 fw-semibold mb-1">
+                Consultas Agendadas para hoje
+            </h1>
+        </div>
+
+        <!-- filtro de pacientes -->
+        <form method="GET" class="d-flex flex-wrap gap-2">
+
+            <select name="pacientes"
+                    class="form-select form-select-sm"
+                    style="min-width: 190px;">
+
+                <option value="">
+                    Todos os pacientes
+                </option>
+
+                {% for paciente in pacientes %}
+
+                    <option value="{{ paciente.id_usuario }}"
+                        {% if paciente_selecionado == paciente.id_usuario|stringformat:"s" %}selected{% endif %}>
+
+                        {{ paciente.nome_usuario }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <button type="submit" class="btn btn-primary btn-sm px-3">
+
+                <i class="bi bi-funnel me-1"></i>
+                Filtrar
+
+            </button>
+
+            {% if paciente_selecionado %}
+
+                <a href="{% url 'home_medico' %}"
+                   class="btn btn-outline-secondary btn-sm">
+
+                    Limpar
+
+                </a>
+
+            {% endif %}
+        </form>
+
+    </div>
+    {% for consulta in consultas %}
+
+    <div class="card border shadow-sm mb-3">
+
+        <div class="card-body p-3">
+
+            <div class="row align-items-center g-3">
+
+                <!-- horario -->
+                <div class="col-auto">
+
+                    <div class="bg-primary-subtle text-primary rounded-2 p-2 text-center"
+                        style="min-width: 78px;">
+
+                        <div class="fs-5 fw-semibold">
+                            {{ consulta.horario_consulta|time:"H:i" }}
+                        </div>
+
+                        <div class="small">
+                            Atendimento
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- dados da consulta -->
+                <div class="col">
+
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+
+                        <h3 class="h6 fw-semibold mb-0">
+                            {{ consulta.id_paciente.nome_usuario }}
+                        </h3>
+
+                        {% if consulta.status_consulta|lower == "confirmada" %}
+
+                            <span class="badge bg-success-subtle text-success">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Confirmada
+                            </span>
+
+                        {% elif consulta.status_consulta|lower == "pendente" %}
+
+                            <span class="badge bg-warning-subtle text-warning-emphasis">
+                                <i class="bi bi-clock me-1"></i>
+                                Pendente
+                            </span>
+
+                        {% elif consulta.status_consulta|lower == "cancelada" %}
+
+                            <span class="badge bg-danger-subtle text-danger">
+                                <i class="bi bi-x-circle me-1"></i>
+                                Cancelada
+                            </span>
+
+                        {% elif consulta.status_consulta|lower == "realizada" %}
+
+                            <span class="badge bg-secondary-subtle text-secondary">
+                                <i class="bi bi-clipboard2-check me-1"></i>
+                                Realizada
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary-subtle text-secondary">
+                                {{ consulta.status_consulta|default:"Sem status"|title }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <p class="text-secondary small mb-1">
+                        <i class="bi bi-person-badge me-1"></i>
+                        Paciente
+                    </p>
+
+                    <p class="text-secondary small mb-0">
+                        <i class="bi bi-card-text me-1"></i>
+                        {{ consulta.detalhes_consulta|default:"Nenhum detalhe informado" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        </div>
+
+    {% empty %}
+
+    <!-- se não tiver consultas -->
+    <div class="card border shadow-sm">
+
+        <div class="card-body text-center py-5">
+
+            <i class="bi bi-calendar2-x text-secondary fs-1 mb-3"></i>
+
+            <h2 class="h6 fw-semibold">
+                Nenhuma consulta para hoje
+            </h2>
+
+            <p class="text-secondary small mb-0">
+                Você não possui atendimentos agendados para hoje.
+            </p>
+
+        </div>
+
+    </div>
+
+{% endfor %}
+
+{% endblock %}

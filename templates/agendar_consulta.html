@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Agendar Consulta | Clínica Humanizar{% endblock %}
+
+{% block content %}
+
+<div class="container py-4" style="max-width: 680px;">
+
+    <!-- CABEÇALHO -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+        <div>
+            <h1 class="h4 fw-semibold mb-1">
+                {% if request.session.usuario_tipo == "recepcionista" %}
+                    Nova consulta
+                {% else %}
+                    Agendar consulta
+                {% endif %}
+            </h1>
+            <p class="text-secondary small mb-0">
+                {% if request.session.usuario_tipo == "recepcionista" %}
+                    Preencha os dados abaixo para cadastrar um atendimento na agenda da clínica.
+                {% else %}
+                    Escolha o especialista, a data e o horário desejados para solicitar seu atendimento.
+                {% endif %}
+            </p>
+        </div>
+
+        <div>
+            <span class="badge bg-primary-subtle text-primary px-3 py-2">
+                <i class="bi bi-calendar-plus me-1"></i>
+                {% if request.session.usuario_tipo == "recepcionista" %}
+                    Recepção
+                {% else %}
+                    Nova Solicitação
+                {% endif %}
+            </span>
+        </div>
+
+    </div>
+
+
+    {% if request.session.usuario_tipo == "paciente" %}
+        <div class="alert alert-info d-flex align-items-start gap-2 mb-4">
+            <i class="bi bi-info-circle fs-5"></i>
+            <div class="small">
+                Sua solicitação será enviada com status <strong>Pendente</strong> e passará pela confirmação da recepção.
+            </div>
+        </div>
+    {% endif %}
+
+
+    <!-- CARD DO FORMULÁRIO -->
+    <div class="card border shadow-sm">
+
+        <div class="card-body p-4">
+
+            <form method="POST" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger small">
+                        {% for erro in form.non_field_errors %}
+                            <div>{{ erro }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for campo in form %}
+                    <div class="mb-3">
+                        <label for="{{ campo.id_for_label }}" class="form-label small fw-medium">
+                            {{ campo.label }}
+                        </label>
+                        {{ campo }}
+                        {% for erro in campo.errors %}
+                            <div class="text-danger small mt-1">{{ erro }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex flex-wrap gap-2 pt-2">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-lg me-1"></i>
+                        {% if request.session.usuario_tipo == "recepcionista" %}
+                            Cadastrar consulta
+                        {% else %}
+                            Solicitar agendamento
+                        {% endif %}
+                    </button>
+
+                    <a href="{% if request.session.usuario_tipo == 'recepcionista' %}{% url 'listar_consultas' %}{% else %}{% url 'listar_consultas_paciente' %}{% endif %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
