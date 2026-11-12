@@ -4,10 +4,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods, require_POST
 
-from ..decorators import login_requerido, tipo_requerido
+from usuarios.decorators import login_requerido, tipo_requerido
+from usuarios.models import Usuario
 from ..forms import ConsultaForm
-from ..models import Usuario, Consulta
-
+from ..models import Consulta
 
 # Tabela com consultas do dia para os recepcionistas
 @login_requerido

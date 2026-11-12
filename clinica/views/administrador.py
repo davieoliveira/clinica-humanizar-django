@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from ..decorators import tipo_requerido
+from ...usuarios.decorators import tipo_requerido
 
 
 @tipo_requerido("administrador")

@@ -10,4 +10,5 @@ urlpatterns = [
     
     # urls do aplicativo de usuários
     path("", include("usuarios.urls")),
+    path("", include("clinica.urls")),
 ]

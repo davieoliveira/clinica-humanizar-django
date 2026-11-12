@@ -4,23 +4,21 @@ from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_POST
 
-from ..models import Usuario
+from .decorators import tipo_requerido
+from .models import Usuario
 
 
 def home(request):
-
     if request.session.get("usuario_id"):
         return redirect("redirecionar_dashboard")
-
     return render(request, "home.html")
 
 
 def senha_valida(senha_armazenada, senha_digitada):
-
     if not senha_armazenada:
         return False
 
-    # usa bcrypt para verificar a senha
+    # Verifica senhas com hash bcrypt ($2a$, $2b$, $2y$)
     if senha_armazenada.startswith(("$2a$", "$2b$", "$2y$")):
         try:
             return bcrypt.checkpw(
@@ -30,19 +28,16 @@ def senha_valida(senha_armazenada, senha_digitada):
         except ValueError:
             return False
 
-    # usa o Django para verificar a senha
+    # Verifica senhas no padrão do Django
     return check_password(senha_digitada, senha_armazenada)
 
 
 @require_http_methods(["GET", "POST"])
 def login_view(request):
-
-    # Se já estiver autenticado, vai para o painel
     if request.session.get("usuario_id"):
         return redirect("redirecionar_dashboard")
 
     if request.method == "POST":
-
         email = request.POST.get("email", "").strip().lower()
         senha = request.POST.get("senha", "")
 
@@ -52,16 +47,11 @@ def login_view(request):
             usuario = None
 
         if usuario and senha_valida(usuario.senha_usuario, senha):
-
-            # Cria uma nova sessão
             request.session.cycle_key()
-
             request.session["usuario_id"] = usuario.id_usuario
             request.session["usuario_nome"] = usuario.nome_usuario
             request.session["usuario_tipo"] = usuario.tipo_usuario
-
             return redirect("redirecionar_dashboard")
-
         else:
             messages.error(request, "E-mail ou senha inválidos.")
 
@@ -69,7 +59,6 @@ def login_view(request):
 
 
 def redirecionar_dashboard(request):
-
     tipo = request.session.get("usuario_tipo")
 
     destinos = {
@@ -92,7 +81,16 @@ def redirecionar_dashboard(request):
 @require_POST
 def logout_view(request):
     request.session.flush()
-
     messages.success(request, "Você saiu do sistema.")
-
     return redirect("login")
+
+
+@tipo_requerido("administrador")
+def home_administrador(request):
+    context = {
+        "total_usuarios": Usuario.objects.count(),
+        "total_pacientes": Usuario.objects.filter(tipo_usuario="paciente").count(),
+        "total_medicos": Usuario.objects.filter(tipo_usuario="medico").count(),
+        "total_recepcionistas": Usuario.objects.filter(tipo_usuario="recepcionista").count(),
+    }
+    return render(request, "administrador/home.html", context)

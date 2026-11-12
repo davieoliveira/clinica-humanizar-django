@@ -1,10 +1,8 @@
 from django import forms
-
-from .models import Consulta, Usuario
-
+from .models import Consulta
+from usuarios.models import Usuario
 
 class ConsultaForm(forms.ModelForm):
-
     STATUS_CHOICES = [
         ("pendente", "Pendente"),
         ("confirmada", "Confirmada"),
