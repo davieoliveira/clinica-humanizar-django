@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'usuarios', # Para adicionar o app de usuários que criei.
+    'clinica', # Para adicionar o app de clínica que criei.
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware', # Permite manter o usuário conectado.
