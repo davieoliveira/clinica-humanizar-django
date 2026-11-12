@@ -5,6 +5,7 @@ urlpatterns = [
     # Paciente
     path("paciente/", views.home_paciente, name="home_paciente"),
     path("paciente/consultas/", views.listar_consultas_paciente, name="listar_consultas_paciente"),
+    path("paciente/consultas/solicitar/", views.solicitar_consulta, name="solicitar_consulta"),
 
     # Médico
     path("medico/", views.home_medico, name="home_medico"),

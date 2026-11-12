@@ -1,4 +1,4 @@
-from .paciente import home_paciente, listar_consultas_paciente
+from .paciente import home_paciente, listar_consultas_paciente, solicitar_consulta
 from .medico import home_medico, listar_consultas_medico
 from .recepcionista import (
     home_recepcionista,
