@@ -1,6 +1,10 @@
 ## Configuração de Ambiente no Windows
 
-> Criar o ambiente virtual(venv)
+Para rodar os comandos a baixo é importante ter o python 12 instalado além do xampp para usar o maria db, alguns comandos dependem que o sql esteja rodando para poder funcionar.
+
+---
+
+Criar o ambiente virtual(venv)
 ```powershell
 py -3.12 -m venv venv
 ```
