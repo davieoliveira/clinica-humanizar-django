@@ -42,16 +42,16 @@ class ConsultaForm(forms.ModelForm):
                 format="%Y-%m-%d",
                 attrs={"type": "date", "class": "form-control"},
             ),
-            "horario_consulta": forms.TimeInput(
-                format="%H:%M",
-                attrs={"type": "time", "class": "form-control"},
+            "horario_consulta": forms.Select(
+                choices=[(f"{h:02d}:00", f"{h:02d}:00") for h in range(7, 19)],
+                attrs={"class": "form-select"},
             ),
             "detalhes_consulta": forms.Textarea(
                 attrs={"rows": 3, "class": "form-control"}
             ),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, paciente_id=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Só filtra pacientes se o campo existir no formulário (na recepção)
