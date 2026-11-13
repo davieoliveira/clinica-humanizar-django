@@ -14,6 +14,7 @@ class ConsultaForm(forms.ModelForm):
 
     status_consulta = forms.ChoiceField(
         choices=STATUS_CHOICES,
+        initial="confirmada",
         label="Status",
         widget=forms.Select(attrs={"class": "form-select"}),
     )

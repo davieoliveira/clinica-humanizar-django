@@ -14,6 +14,7 @@ urlpatterns = [
     # Recepcionista
     path("recepcionista/", views.home_recepcionista, name="home_recepcionista"),
     path("recepcionista/consultas/", views.listar_consultas, name="listar_consultas"),
+    path("recepcionista/consultas/cadastrar/", views.cadastrar_consulta, name="cadastrar_consulta"),
     path("recepcionista/consultas/pendentes/", views.listas_consultas_pendentes, name="consultas_pendentes"),
     path("recepcionista/consultas/<int:id_consulta>/aprovar/", views.aprovar_consulta, name="aprovar_consulta"),
     path("recepcionista/consultas/<int:id_consulta>/editar/", views.editar_consulta, name="editar_consulta"),

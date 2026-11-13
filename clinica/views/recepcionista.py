@@ -159,6 +159,22 @@ def aprovar_consulta(request, id_consulta):
 
     return redirect("consultas_pendentes")
 
+# Recepcionista cadastra uma nova consulta diretamente na agenda.
+@login_requerido
+@tipo_requerido("recepcionista")
+@require_http_methods(["GET", "POST"])
+def cadastrar_consulta(request):
+    if request.method == "POST":
+        form = ConsultaForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Consulta cadastrada com sucesso!")
+            return redirect("listar_consultas")
+    else:
+        form = ConsultaForm()
+
+    return render(request, "agendar_consulta.html", {"form": form})
 
 # Recepcionista edita uma consulta existente.
 @tipo_requerido("recepcionista")

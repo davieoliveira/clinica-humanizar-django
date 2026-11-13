@@ -7,4 +7,5 @@ from .recepcionista import (
     aprovar_consulta,
     editar_consulta,
     excluir_consulta,
+    cadastrar_consulta,
 )
