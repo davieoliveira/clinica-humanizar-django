@@ -65,6 +65,18 @@ class ConsultaForm(forms.ModelForm):
             tipo_usuario="medico"
         ).order_by("nome_usuario")
 
+        # Para formatar input
+        self.fields["id_medico"].empty_label = "Selecione um médico"
+        
+        # Para formatar opções do input com especialidade do médico e seu nome
+        self.fields["id_medico"].label_from_instance = (
+            lambda m: (
+                f"Dr(a). {m.nome_usuario} — {m.id_especialidade.nome_especialidade}"
+                if m.id_especialidade
+                else f"Dr(a). {m.nome_usuario}"
+            )
+        )
+
     def clean(self):
         dados = super().clean()
 

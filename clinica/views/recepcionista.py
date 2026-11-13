@@ -199,7 +199,6 @@ def editar_consulta(request, id_consulta):
         {"form": form, "consulta": consulta},
     )
 
-
 # Recepcionista exclui uma consulta (somente via POST).
 @tipo_requerido("recepcionista")
 @require_POST
