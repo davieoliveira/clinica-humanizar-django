@@ -8,6 +8,7 @@ from usuarios.decorators import login_requerido, tipo_requerido
 from usuarios.models import Usuario
 from ..forms import ConsultaForm
 from ..models import Consulta
+from usuarios.forms import CadastroPacienteForm
 
 # Tabela com consultas do dia para os recepcionistas
 @tipo_requerido("recepcionista")
@@ -191,6 +192,28 @@ def editar_consulta(request, id_consulta):
         "recepcionista/editar_consulta.html",
         {"form": form, "consulta": consulta},
     )
+@require_http_methods(["GET", "POST"])
+def cadastrar_paciente(request):
+    if request.method == "POST":
+        form = CadastroPacienteForm(request.POST)
+
+        if form.is_valid():
+            try:
+                form.save()
+            except IntegrityError:
+                # Raro: alguém cadastrou o mesmo e-mail/CPF no mesmo instante.
+                form.add_error(None, "E-mail ou CPF já cadastrado.")
+            else:
+                messages.success(
+                    request, "Conta criada com sucesso! Faça login para continuar."
+                )
+                return redirect("login")
+    else:
+        form = CadastroPacienteForm()
+
+    return render(request, "cadastro.html", {"form": form})
+
+
 
 # Recepcionista exclui uma consulta (somente via POST).
 @tipo_requerido("recepcionista")

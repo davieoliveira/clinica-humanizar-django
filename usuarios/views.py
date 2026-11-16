@@ -18,16 +18,6 @@ def senha_valida(senha_armazenada, senha_digitada):
     if not senha_armazenada:
         return False
 
-    # Verifica senhas com hash bcrypt ($2a$, $2b$, $2y$)
-    if senha_armazenada.startswith(("$2a$", "$2b$", "$2y$")):
-        try:
-            return bcrypt.checkpw(
-                senha_digitada.encode("utf-8"),
-                senha_armazenada.encode("utf-8")
-            )
-        except ValueError:
-            return False
-
     # Verifica senhas no padrão do Django
     return check_password(senha_digitada, senha_armazenada)
 

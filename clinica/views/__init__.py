@@ -8,4 +8,5 @@ from .recepcionista import (
     editar_consulta,
     excluir_consulta,
     cadastrar_consulta,
+    cadastrar_paciente
 )

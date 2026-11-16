@@ -3,13 +3,18 @@
 {% block title %}Cadastro | Clínica Humanizar{% endblock %}
 
 {% block content %}
+<!-- Cadastro de Paciente usado tanto na tela de cadastro quanto pelo recepcionista -->
+
 <div class="container-fluid bg-light d-flex justify-content-center align-items-center py-5">
 
     <div class="card shadow-sm border-0 rounded-3" style="width: 100%; max-width: 480px;">
 
         <div class="card-body p-4">
-
-            <h4 class="fw-semibold mb-1">Crie sua conta</h4>
+            {% if request.session.usuario_tipo == "recepcionista" %}
+                <h4 class="fw-semibold mb-1"> Cadastro de Paciente </h4>
+            {% else %}
+                <h4 class="fw-semibold mb-1"> Criar Conta </h4>
+            {% endif %}
 
             <p class="text-secondary small mb-4">
                 Cadastro para pacientes. Preencha seus dados para continuar.

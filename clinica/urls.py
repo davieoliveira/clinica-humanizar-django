@@ -19,4 +19,5 @@ urlpatterns = [
     path("recepcionista/consultas/<int:id_consulta>/aprovar/", views.aprovar_consulta, name="aprovar_consulta"),
     path("recepcionista/consultas/<int:id_consulta>/editar/", views.editar_consulta, name="editar_consulta"),
     path("recepcionista/consultas/<int:id_consulta>/excluir/", views.excluir_consulta, name="excluir_consulta"),
+    path("recepcionista/consultas/cadastrar_paciente", views.cadastrar_paciente, name="cadastrar_paciente"),
 ]
