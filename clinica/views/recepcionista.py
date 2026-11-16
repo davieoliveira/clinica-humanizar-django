@@ -10,7 +10,6 @@ from ..forms import ConsultaForm
 from ..models import Consulta
 
 # Tabela com consultas do dia para os recepcionistas
-@login_requerido
 @tipo_requerido("recepcionista")
 def home_recepcionista(request):
 
@@ -68,7 +67,6 @@ def home_recepcionista(request):
 
 
 # Tabela com todas as consultas.
-@login_requerido
 @tipo_requerido("recepcionista")
 def listar_consultas(request):
 
@@ -83,8 +81,6 @@ def listar_consultas(request):
         {"consultas": consultas}
     )
 
-
-@login_requerido
 @tipo_requerido("recepcionista")
 def listas_consultas_pendentes(request):
 
@@ -117,8 +113,6 @@ def listas_consultas_pendentes(request):
         {"consultas": consultas}
     )
 
-
-@login_requerido
 @tipo_requerido("recepcionista")
 @require_POST
 def aprovar_consulta(request, id_consulta):
@@ -160,7 +154,6 @@ def aprovar_consulta(request, id_consulta):
     return redirect("consultas_pendentes")
 
 # Recepcionista cadastra uma nova consulta diretamente na agenda.
-@login_requerido
 @tipo_requerido("recepcionista")
 @require_http_methods(["GET", "POST"])
 def cadastrar_consulta(request):
