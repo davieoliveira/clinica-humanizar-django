@@ -5,8 +5,7 @@ from django.shortcuts import redirect
 urlpatterns = [
     path("admin/", admin.site.urls),
     
-    # Página inicial
-    path("", lambda request: redirect("login")),
+
     
     # urls do aplicativo de usuários
     path("", include("usuarios.urls")),

@@ -1,35 +1,69 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Clínica Humanizar</title>
+{% extends "base.html" %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+{% block title %}Início | Clínica Humanizar{% endblock %}
 
-    <nav class="navbar navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                Clínica Humanizar
-            </a>
+{% block content %}
+
+<!-- Container com detalhes sobre a clinica -->
+<section class="py-5" style="background-color: #f0f8fc;">
+    <div class="container py-lg-5">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-7">
+                <span class="badge rounded-pill px-3 py-2 mb-3"
+                      style="background-color: #d9eff8; color: #218bb5;">
+                    Cuidado, saúde e acolhimento
+                </span>
+
+                <h1 class="display-4 fw-bold mb-4">
+                    Cuidar de você é a nossa
+                    <span style="color: #269BCB;">prioridade.</span>
+                </h1>
+
+                <p class="lead text-secondary mb-4">
+                    A Clínica Humanizar acredita que a saúde vai além
+                    de consultas e procedimentos. Nosso compromisso é
+                    proporcionar um atendimento organizado, humanizado
+                    e dedicado às necessidades de cada paciente.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    {% if request.session.usuario_id %}
+                        <a href="{% url 'redirecionar_dashboard' %}"
+                           class="btn btn-primary btn-lg px-4">
+                            Acessar meu painel
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}"
+                           class="btn btn-primary btn-lg px-4">
+                            Acessar o sistema
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="rounded-4 p-5 text-center"
+                     style="background-color: #269BCB; color: white;">
+                    <div class="mb-3">
+                        <i class="bi bi-heart-pulse"
+                           style="font-size: 5rem;"></i>
+                    </div>
+
+                    <h2 class="h3 fw-bold">
+                        Clínica Humanizar
+                    </h2>
+
+                    <p class="mb-0">
+                        Saúde com atenção, respeito e cuidado
+                        em cada atendimento.
+                    </p>
+                </div>
+            </div>
+
         </div>
-    </nav>
-cd
-    <main class="container mt-5">
-        <h1>Bem-vindo à Clínica Humanizar!</h1>
+    </div>
+</section>
 
-        <p>
-            Nosso sistema de gerenciamento de consultas médicas.
-        </p>
-
-        <a href="{% url 'home' %}" class="btn btn-primary">
-            Página inicial
-        </a>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+{% endblock %}
