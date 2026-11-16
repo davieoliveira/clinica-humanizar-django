@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from usuarios.models import Usuario
-from .models import Consulta
+from ..models import Consulta
 
 
 class ConsultaForm(forms.ModelForm):
