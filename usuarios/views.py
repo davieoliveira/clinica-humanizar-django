@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_POST
-
+from .forms import CadastroPacienteForm
 from .decorators import tipo_requerido
 from .models import Usuario
 
@@ -56,6 +56,34 @@ def login_view(request):
             messages.error(request, "E-mail ou senha inválidos.")
 
     return render(request, "login.html")
+
+# Cadastro de paciente (link "Cadastre-se" da tela de login).
+# Só cria usuários do tipo paciente; os demais perfis continuam sendo
+# criados por quem administra o sistema.
+@require_http_methods(["GET", "POST"])
+def cadastro_view(request):
+    # Quem já está logado não precisa se cadastrar.
+    if request.session.get("usuario_id"):
+        return redirect("redirecionar_dashboard")
+
+    if request.method == "POST":
+        form = CadastroPacienteForm(request.POST)
+
+        if form.is_valid():
+            try:
+                form.save()
+            except IntegrityError:
+                # Raro: alguém cadastrou o mesmo e-mail/CPF no mesmo instante.
+                form.add_error(None, "E-mail ou CPF já cadastrado.")
+            else:
+                messages.success(
+                    request, "Conta criada com sucesso! Faça login para continuar."
+                )
+                return redirect("login")
+    else:
+        form = CadastroPacienteForm()
+
+    return render(request, "cadastro.html", {"form": form})
 
 
 def redirecionar_dashboard(request):
