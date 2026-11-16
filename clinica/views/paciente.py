@@ -11,7 +11,6 @@ def home_paciente(request):
 
 
 # Tabela com as consultas do paciente logado.
-@login_requerido
 @tipo_requerido("paciente")
 def listar_consultas_paciente(request):
 
@@ -29,7 +28,6 @@ def listar_consultas_paciente(request):
     )
 
 # Paciente solicita uma nova consulta.
-@login_requerido
 @tipo_requerido("paciente")
 @require_http_methods(["GET", "POST"])
 def solicitar_consulta(request):

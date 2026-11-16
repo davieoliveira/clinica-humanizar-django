@@ -4,7 +4,6 @@ from usuarios.decorators import login_requerido, tipo_requerido
 from usuarios.models import Usuario
 from ..models import Consulta
 
-@login_requerido
 @tipo_requerido("medico")
 def home_medico(request):
 
@@ -66,7 +65,6 @@ def home_medico(request):
     )
 
 # Tabela com as consultas do médico logado.
-@login_requerido
 @tipo_requerido("medico")
 def listar_consultas_medico(request):
 
